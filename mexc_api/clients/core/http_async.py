@@ -75,9 +75,11 @@ class ApiClient:
         if self.rate_limits_amount is not None:
             if self.rate_limits.is_limited:
                 if self.enable_logging:
-                    self.logging.warning(
-                        mes=f"Your request reached rate limits! sleeping for {self.rate_limits_cool_down} secs..",
+                    warning_text = (
+                        f"Your request reached rate limits ({self.rate_limits_amount})! "
+                        f"sleeping for {self.rate_limits_cool_down} secs.."
                     )
+                    self.logging.warning(mes=warning_text)
                 await asyncio.sleep(self.rate_limits_cool_down)
 
         if self.enable_logging:
