@@ -1,0 +1,48 @@
+class OrderSide:
+    BUY = "BUY"
+    SELL = "SELL"
+
+
+class OrderType:
+    LIMIT = "LIMIT"
+    MARKET = "MARKET"
+    LIMIT_MAKER = "LIMIT_MAKER"
+    LIMIT_ORDER = "LIMIT_ORDER"
+    IMMEDIATE_OR_CANCEL = "IMMEDIATE_OR_CANCEL"
+    FILL_OR_KILL = "FILL_OR_KILL"
+
+
+class OrderStatus:
+    NEW = "NEW"
+    FILLED = "FILLED"
+    PARTIALLY_FILLED = "PARTIALLY_FILLED"
+    CANCELED = "CANCELED"
+    PARTIALLY_CANCELED = "PARTIALLY_CANCELED"
+
+
+class KlineInterval:
+    m1 = "1m"
+    m5 = "5m"
+    m15 = "15m"
+    m30 = "30m"
+    m60 = "60m"
+    h4 = "4h"
+    d1 = "1d"
+    W1 = "1W"
+    M1 = '1M'
+
+
+class ChangedType:
+    WITHDRAW = "WITHDRAW"
+    WITHDRAW_FEE = "WITHDRAW_FEE"
+    DEPOSIT = "DEPOSIT"
+    DEPOSIT_FEE = "DEPOSIT_FEE"
+    ENTRUST = "ENTRUST"
+    ENTRUST_PLACE = "ENTRUST_PLACE"
+    ENTRUST_CANCEL = "ENTRUST_CANCEL"
+    TRADE_FEE = "TRADE_FEE"
+    ENTRUST_UNFROZEN = "ENTRUST_UNFROZEN"
+    SUGAR = "SUGAR"
+    ETF_INDEX = "ETF_INDEX"
+
+
