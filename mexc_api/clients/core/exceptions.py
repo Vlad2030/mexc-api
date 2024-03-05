@@ -1,0 +1,2 @@
+class ForbiddenMethod(Exception):
+    pass
