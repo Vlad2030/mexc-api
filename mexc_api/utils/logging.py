@@ -40,17 +40,17 @@ class Logging:
     def info(self, mes: str) -> None:
         return loguru.logger.info(mes)
 
-    def success(mes: str) -> None:
+    def success(self, mes: str) -> None:
         return loguru.logger.success(mes)
 
-    def warning(mes: str) -> None:
+    def warning(self, mes: str) -> None:
         return loguru.logger.warning(mes)
 
-    def error(mes: str) -> None:
+    def error(self, mes: str) -> None:
         return loguru.logger.error(mes)
 
-    def critical(mes: str) -> None:
+    def critical(self, mes: str) -> None:
         return loguru.logger.critical(mes)
 
-    def exception(mes: str) -> None:
+    def exception(self, mes: str) -> None:
         return loguru.logger.exception(mes)
