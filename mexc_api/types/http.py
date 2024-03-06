@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from mexc_api.types.base_schema import BaseSchema
 
 
-class ApiResponse(BaseModel):
+class ApiResponse(BaseSchema):
     response: dict | list
     status_code: int
