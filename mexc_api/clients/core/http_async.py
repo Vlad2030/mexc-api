@@ -1,9 +1,12 @@
 import asyncio
 
+from typing import Any
+
 import orjson
 from aiohttp import ClientSession
 
-from mexc_api.clients.core.exceptions import ForbiddenMethod
+from mexc_api.clients.core.exceptions import ForbiddenMethod, ErrorStatusCode
+from mexc_api.status_codes import BAD_STATUS_CODES
 from mexc_api.types.http import ApiResponse
 from mexc_api.utils.logging import Logging
 from mexc_api.utils.rate_limits import RateLimits
@@ -18,6 +21,8 @@ class ApiClient:
             rate_limits: int | None = None,
             enable_logging: bool = True,
             save_logs: bool = False,
+            custom_error_status_codes: list[int] | None = None,
+            custom_error_schema: Any | None = None,
     ) -> None:
         self.base_url = base_url
         self.custom_header = custom_header
@@ -26,7 +31,10 @@ class ApiClient:
         self.rate_limits_cool_down = 1.00
         self.enable_logging = enable_logging
         self.save_logs = save_logs
+        self.custom_error_status_codes = custom_error_status_codes
+        self.custom_error_schema = custom_error_schema
         self.header = {}
+        self.error_codes = BAD_STATUS_CODES
         self.default_allowed_methods = [
             "GET",
             "HEAD",
@@ -46,6 +54,9 @@ class ApiClient:
 
         if self.allowed_methods is None:
             self.allowed_methods = self.default_allowed_methods
+
+        if self.custom_error_status_codes is None:
+            self.error_codes.append(self.custom_error_status_codes)
 
         self.session = ClientSession(
             base_url=self.base_url,
@@ -99,6 +110,14 @@ class ApiClient:
                 loads=orjson.loads,
                 content_type="application/json",
             )
+
+            if status_code in self.error_codes:
+                error_text = f"Error status code ({status_code})!"
+                if self.custom_error_schema is not None:
+                    error_text = self.custom_error_schema(**response)
+                if self.enable_logging:
+                    self.logging.error(mes=error_text)
+                raise ErrorStatusCode(error_text)
 
         if self.rate_limits_amount is not None:
             self.rate_limits.new
