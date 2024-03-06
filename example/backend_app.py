@@ -39,7 +39,7 @@ class ResponseSymbols(BaseModel):
     status_code=status.HTTP_200_OK,
 )
 async def get_prices(symbol: RequestSymbols) -> ResponseSymbols:
-    client = MEXCClient(logging=True)
+    client = MEXCClient()
     marked_data = MarkedData(client)
 
     symbols = symbol.symbols if isinstance(symbol.symbols, list) else [symbol.symbols]
