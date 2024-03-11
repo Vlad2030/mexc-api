@@ -23,6 +23,7 @@ class ApiClient:
             save_logs: bool = False,
             custom_error_status_codes: list[int] | None = None,
             custom_error_schema: Any | None = None,
+            proxy: str | None = None,
     ) -> None:
         self.base_url = base_url
         self.custom_header = custom_header
@@ -33,6 +34,7 @@ class ApiClient:
         self.save_logs = save_logs
         self.custom_error_status_codes = custom_error_status_codes
         self.custom_error_schema = custom_error_schema
+        self.proxy = proxy
         self.header = {}
         self.error_codes = BAD_STATUS_CODES
         self.default_allowed_methods = [
@@ -103,6 +105,7 @@ class ApiClient:
             url=endpoint,
             params=params,
             json=json,
+            proxy=self.proxy,
         ) as request:
             status_code = request.status
             response = await request.json(
@@ -117,6 +120,7 @@ class ApiClient:
                     error_text = self.custom_error_schema(**response)
                 if self.enable_logging:
                     self.logging.error(mes=error_text)
+                await self.close_session()
                 raise ErrorStatusCode(error_text)
 
         if self.rate_limits_amount is not None:
