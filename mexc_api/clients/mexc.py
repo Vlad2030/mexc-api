@@ -10,6 +10,7 @@ class MEXCClient(ApiClient):
             mexc_secret: str | None = None,
             logging: bool = False,
             save_logs: bool = False,
+            proxy: str = None,
     ) -> None:
         self.base_url = "https://api.mexc.com"
         self.mexc_allowed_methods = [
@@ -25,6 +26,7 @@ class MEXCClient(ApiClient):
         self.mexc_secret = mexc_secret
         self.logging = logging
         self.save_logs = save_logs
+        self.proxy = proxy
 
         if self.mexc_key is not None:
             self.mexc_header = {"X-MEXC-APIKEY": self.mexc_key}
@@ -38,4 +40,5 @@ class MEXCClient(ApiClient):
             save_logs=self.save_logs,
             custom_error_status_codes=self.mexc_error_codes,
             custom_error_schema=self.mexc_error_schema,
+            proxy=self.proxy,
         )
