@@ -100,33 +100,37 @@ class ApiClient:
                 f"RPS: {self.rate_limits.amount}\t| {method}\t| {self.base_url}{endpoint}",
             )
 
-        async with self.session.request(
+        request = await self.session.request(
             method=method,
             url=endpoint,
             params=params,
             json=json,
             proxy=self.proxy,
-        ) as request:
-            status_code = request.status
-            response = await request.json(
-                encoding="utf-8",
-                loads=orjson.loads,
-                content_type="application/json",
-            )
+        )
 
-            if status_code in self.error_codes:
-                error_text = f"Error status code ({status_code})!"
-                if self.custom_error_schema is not None:
-                    error_text = self.custom_error_schema(**response)
-                if self.enable_logging:
-                    self.logging.error(mes=error_text)
-                await self.close_session()
-                raise ErrorStatusCode(error_text)
+        status_code = request.status
+        response = await request.json(
+            encoding="utf-8",
+            loads=orjson.loads,
+            content_type="application/json",
+        )
+
+        if status_code in self.error_codes:
+            error_text = f"Error status code ({status_code})!"
+
+            if self.custom_error_schema is not None:
+                error_text = self.custom_error_schema(**response)
+
+            if self.enable_logging:
+                self.logging.error(mes=error_text)
+
+            await self.close_session()
+            raise ErrorStatusCode(error_text)
 
         if self.rate_limits_amount is not None:
             self.rate_limits.new
 
-            return ApiResponse(
-                response=response,
-                status_code=status_code,
-            )
+        return ApiResponse(
+            response=response,
+            status_code=status_code,
+        )
