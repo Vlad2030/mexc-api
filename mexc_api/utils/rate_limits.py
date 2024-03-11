@@ -1,13 +1,16 @@
 from mexc_api.utils.time import epoch_time
 
+rps_history: dict[int, int] = {
+    # example
+    # 1709604430 (epoch time): 23 (amount of requests)
+}
+
 
 class RateLimits:
     def __init__(self, max_rps: int) -> None:
+        global rps_history
         self.max_rps = max_rps
-        self.rps_history: dict[int, int] = {
-            # example
-            # 1709604430 (epoch time): 23 (amount of requests)
-        }
+        self.rps_history = rps_history
 
     @property
     def is_limited(self) -> bool:
