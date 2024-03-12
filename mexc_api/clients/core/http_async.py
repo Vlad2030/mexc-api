@@ -18,7 +18,7 @@ class ApiClient:
             base_url: str,
             custom_header: dict | None = None,
             allowed_methods: list[str] | None = None,
-            rate_limits: int | None = None,
+            rate_limits: int = None,
             enable_logging: bool = True,
             save_logs: bool = False,
             custom_error_status_codes: list[int] | None = None,
@@ -28,7 +28,7 @@ class ApiClient:
         self.base_url = base_url
         self.custom_header = custom_header
         self.allowed_methods = allowed_methods
-        self.rate_limits_amount = rate_limits if rate_limits is not None else 10000
+        self.rate_limits_amount = rate_limits
         self.rate_limits_cool_down = 1.00
         self.enable_logging = enable_logging
         self.save_logs = save_logs
@@ -48,7 +48,7 @@ class ApiClient:
             "TRACE",
             "PATCH",
         ]
-        self.rate_limits = RateLimits(max_rps=self.rate_limits_amount)
+        self.rate_limits = RateLimits(self.rate_limits_amount)
         self.logging = Logging(save_logs=self.save_logs)
 
         if self.custom_header is not None:
@@ -65,6 +65,9 @@ class ApiClient:
             headers=self.header,
             json_serialize=(lambda x: orjson.dumps(x).decode()),
         )
+
+    async def __aenter__(self) -> "ApiClient":
+        return self
 
     async def __aexit__(self) -> None:
         return await self.close_session()
@@ -89,7 +92,7 @@ class ApiClient:
             if self.rate_limits.is_limited:
                 if self.enable_logging:
                     warning_text = (
-                        f"Your request reached rate limits ({self.rate_limits_amount})! "
+                        f"Your request reached rate limits! "
                         f"sleeping for {self.rate_limits_cool_down} secs.."
                     )
                     self.logging.warning(mes=warning_text)
@@ -127,8 +130,7 @@ class ApiClient:
             await self.close_session()
             raise ErrorStatusCode(error_text)
 
-        if self.rate_limits_amount is not None:
-            self.rate_limits.new
+        self.rate_limits.new if self.rate_limits_amount is not None else ...
 
         return ApiResponse(
             response=response,
