@@ -1,6 +1,6 @@
 from mexc_api.utils.time import epoch_time
 
-rps_history: dict[int, int] = {
+rps_history: dict[int, list[str, int]] = {
     # example
     # 1709604430 (epoch time): 23 (amount of requests)
 }
