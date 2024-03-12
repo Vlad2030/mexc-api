@@ -1,6 +1,9 @@
 from mexc_api.clients.core.http_async import ApiClient
 from mexc_api.status_codes import MEXC_ERROR_CODES
 from mexc_api.types.mexc import MexcApiError
+from mexc_api.utils.signature import signature
+from mexc_api.utils.time import timestamp
+from mexc_api.utils.urls import urlencode
 
 
 class MEXCClient(ApiClient):
@@ -27,6 +30,10 @@ class MEXCClient(ApiClient):
         self.logging = logging
         self.save_logs = save_logs
         self.proxy = proxy
+
+        self.signature = signature
+        self.timestamp = timestamp
+        self.urlencode = urlencode
 
         if self.mexc_key is not None:
             self.mexc_header = {"X-MEXC-APIKEY": self.mexc_key}
