@@ -1,0 +1,6 @@
+asyncio==3.4.3
+aiohttp==3.9.0
+aiodns==3.1.1
+Brotli==1.1.0
+pydantic==2.5.1
+orjson==3.9.10
