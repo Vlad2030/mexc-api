@@ -146,7 +146,7 @@ class SpotAccountTrade:
             )
             .decode()
             .replace("\\", ""),
-        )   # dont judge me for this shit code, its the most better solution
+        )   # dont judge me for this shit code, its the most better solution xD
         params_dict["symbol"] = order.symbol
         params_dict["side"] = order.side
         params_dict["type"] = order.type
@@ -215,7 +215,7 @@ class SpotAccountTrade:
 
         return CancelOrder(**to_snake_case(request.response))
 
-    async def cancel_order(
+    async def cancel_all_open_orders_on_a_symbol(
             self,
             symbol: str | list[str],
     ) -> CancelOrder | list[CancelOrder]:
