@@ -1,4 +1,4 @@
-from mexc_api.enums import OrderSide, OrderType
+from mexc_api.enums import OrderSide, OrderType, OrderStatus
 from mexc_api.types.base_schema import BaseSchema
 
 class UserApiDefaultSymbol(BaseSchema):
@@ -48,7 +48,7 @@ class CancelOrder(BaseSchema):
     orig_qty: str
     executed_qty: str
     commulative_quote_qty: str
-    status: str
+    status: OrderStatus
     time_in_force: str
     type: OrderType
     side: OrderSide
