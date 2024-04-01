@@ -6,10 +6,10 @@ import orjson
 from aiohttp import ClientSession
 
 from mexc_api.clients.core.exceptions import ForbiddenMethod, ErrorStatusCode
+from mexc_api.clients.core.rate_limits import RateLimits
 from mexc_api.status_codes import BAD_STATUS_CODES
 from mexc_api.types.http import ApiResponse
 from mexc_api.utils.logging import Logging
-from mexc_api.utils.rate_limits import RateLimits
 
 
 class ApiClient:
